@@ -45,13 +45,12 @@ class ConnectDatabaseWindow(QtWidgets.QWidget):
     def connect(self):
         try: 
             mydb = mysql.connector.connect(host= self.input_host.text(), user= self.input_user.text(), password = self.input_password.text())
-            print("Database connected.")
+            QtWidgets.QMessageBox.about(self, "Information", "Successfully connected.")
         except mysql.connector.Error as err:
-            #dodati error window
             if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-                print("Something is wrong.")
+                QtWidgets.QMessageBox.warning(self, "Error", "Something is wrong with your username or password. Try again.", QtWidgets.QMessageBox.StandardButton.Close)
             elif err.errno == errorcode.ER_BAD_DB_ERROR:
-                print("Database does not exist.")
+                QtWidgets.QMessageBox.warning(self, "Error", "Database doesn't exist.", QtWidgets.QMessageBox.StandardButton.Close)
             else:
                 print(err)
         else:
@@ -163,7 +162,7 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
     
     def show_connect_database(self):
-        print("sssss")
+        #print("sssss")
         self.w = ConnectDatabaseWindow()
         self.w.show()
 
