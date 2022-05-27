@@ -12,6 +12,7 @@ from dialog import Dialog
 from PyQt5 import QtCore, QtGui, QtWidgets
 import mysql_functions
 import config
+import pymongo
 
 
 class Ui_MainWindow(object):
@@ -46,6 +47,9 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.loadConfigButton)
         self.connectButton = QtWidgets.QPushButton(self.tab)
         self.connectButton.setObjectName("connectButton")
+
+        #self.connectButton.clicked.connect(self.connect_mongo)
+
         self.verticalLayout.addWidget(self.connectButton)
         self.tabWidget.addTab(self.tab, "")
         self.tab_3 = QtWidgets.QWidget()
@@ -225,6 +229,9 @@ class Ui_MainWindow(object):
         if dlg.exec_():
             filenames = dlg.selectedFiles()
             self.db_connect(config.load_config(filenames[0]))
+    
+    #def connect_mongo(self):
+        #my_client = pymongo.MongoClient("mongodb://localhost:27017/")
 
     def delete_selected_db(self):
         selected_indexes = self.tableWidget_2.selectedIndexes()
