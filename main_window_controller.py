@@ -2,8 +2,6 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 from main_window_model import MainWindowModel
 from utils.mysql_utils import MySQLUtils
-# from data_handler_component.dataHandlerViewer import Ui_DataHandlerViewer
-from data_handler_component.data_handler_viewer import DataHandlerViewer
 from data_handler_dialog.data_handler_dialog import DataHandlerDialog
 
 class MainWindowController:

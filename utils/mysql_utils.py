@@ -4,8 +4,6 @@ from PyQt5.QtWidgets import QMessageBox
 
 from utils.load_config import load_config
 from utils.datatypes import sql_to_python
-# ucitavanje i konekcija na bazu
-# crud upiti nad bazom
 
 class MySQLUtils:
     class __MySQLUtils:
@@ -43,43 +41,98 @@ class MySQLUtils:
                 statusBar.showMessage("Creating new database failed.")
 
         def get_all_databases(self):
-            self.mycursor.execute("SHOW DATABASES")
-            dbs = self.mycursor.fetchall()
-            return dbs
+            try:
+                self.mycursor.execute("SHOW DATABASES")
+                dbs = self.mycursor.fetchall()
+                return dbs
+            except Exception as e:
+                print(e)
+                msg = QMessageBox()
+                msg.setIcon(QMessageBox.Information)
+                msg.setText("Getting all databases failed.")
+                msg.setWindowTitle("Info")
+                msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+                msg.exec_()
 
         def get_all_tables(self, database_name):
-            sql = "USE %s" % database_name
-            self.mycursor.execute(sql)
-            self.mycursor.execute("SHOW TABLES")
-            tables = self.mycursor.fetchall()
-            return tables
+            try:
+                sql = "USE %s" % database_name
+                self.mycursor.execute(sql)
+                self.mycursor.execute("SHOW TABLES")
+                tables = self.mycursor.fetchall()
+                return tables
+            except Exception as e:
+                print(e)
+                msg = QMessageBox()
+                msg.setIcon(QMessageBox.Information)
+                msg.setText("Getting all tables failed.")
+                msg.setWindowTitle("Info")
+                msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+                msg.exec_()
 
         def get_table_data(self, table_name):
-            sql = "SELECT * FROM %s" % table_name
-            self.mycursor.execute(sql)
-            table_data = self.mycursor.fetchall()
-            return table_data
+            try:
+                sql = "SELECT * FROM %s" % table_name
+                self.mycursor.execute(sql)
+                table_data = self.mycursor.fetchall()
+                return table_data
+            except Exception as e:
+                print(e)
+                msg = QMessageBox()
+                msg.setIcon(QMessageBox.Information)
+                msg.setText("Getting table data failed.")
+                msg.setWindowTitle("Info")
+                msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+                msg.exec_()
 
         def get_table_row_count(self, table_name):
-            sql = "SELECT COUNT(*) FROM %s" % table_name
-            self.mycursor.execute(sql)
-            row_count = self.mycursor.fetchall()
-            return row_count
+            try:
+                sql = "SELECT COUNT(*) FROM %s" % table_name
+                self.mycursor.execute(sql)
+                row_count = self.mycursor.fetchall()
+                return row_count
+            except Exception as e:
+                print(e)
+                msg = QMessageBox()
+                msg.setIcon(QMessageBox.Information)
+                msg.setText("Getting table row count failed.")
+                msg.setWindowTitle("Info")
+                msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+                msg.exec_()
 
         def get_table_columns(self, table_name):
-            sql = "SHOW COLUMNS FROM %s" % table_name
-            self.mycursor.execute(sql)
-            table_columns = self.mycursor.fetchall()
-            return table_columns
+            try:
+                sql = "SHOW COLUMNS FROM %s" % table_name
+                self.mycursor.execute(sql)
+                table_columns = self.mycursor.fetchall()
+                return table_columns
+            except Exception as e:
+                print(e)
+                msg = QMessageBox()
+                msg.setIcon(QMessageBox.Information)
+                msg.setText("Getting table columns failed.")
+                msg.setWindowTitle("Info")
+                msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+                msg.exec_()
 
         def delete_row(self, database_name, collection_name, row_id):
             contained_data = load_config("config files\mysql_contained_data.json")
             print(collection_name in contained_data)
             if collection_name not in contained_data:
-                sql = "DELETE FROM %s WHERE id = %s" % (collection_name, row_id)
-                self.mycursor.execute(sql)
-                self.mydb.commit()
-                return True
+                try:
+                    sql = "DELETE FROM %s WHERE id = %s" % (collection_name, row_id)
+                    self.mycursor.execute(sql)
+                    self.mydb.commit()
+                    return True
+                except Exception as e:
+                    print(e)
+                    msg = QMessageBox()
+                    msg.setIcon(QMessageBox.Information)
+                    msg.setText("Deleting row failed.")
+                    msg.setWindowTitle("Info")
+                    msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+                    msg.exec_()
+                    return False
             else:
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Information)
@@ -99,6 +152,12 @@ class MySQLUtils:
             except Exception as e:
                 print(e)
                 statusBar.showMessage("Dropping database failed.")
+                msg = QMessageBox()
+                msg.setIcon(QMessageBox.Information)
+                msg.setText("Deleting database failed.")
+                msg.setWindowTitle("Info")
+                msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+                msg.exec_()
             return False
         
         def insert(self, database_name, table_name, columns, values, statusBar):
