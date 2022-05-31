@@ -70,8 +70,10 @@ class MySQLUtils:
                 msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
                 msg.exec_()
 
-        def get_table_data(self, table_name):
+        def get_table_data(self, database_name, table_name):
             try:
+                sql = "USE %s" % database_name
+                self.mycursor.execute(sql)
                 sql = "SELECT * FROM %s" % table_name
                 self.mycursor.execute(sql)
                 table_data = self.mycursor.fetchall()
@@ -100,8 +102,10 @@ class MySQLUtils:
                 msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
                 msg.exec_()
 
-        def get_table_columns(self, table_name):
+        def get_table_columns(self, database_name, table_name):
             try:
+                sql = "USE %s" % database_name
+                self.mycursor.execute(sql)
                 sql = "SHOW COLUMNS FROM %s" % table_name
                 self.mycursor.execute(sql)
                 table_columns = self.mycursor.fetchall()
@@ -161,6 +165,7 @@ class MySQLUtils:
             return False
         
         def insert(self, database_name, table_name, columns, values, statusBar):
+            # id je neophodno staviti ako id nije autoinkrement
             try:
                 sql = "INSERT INTO " + table_name + "("  # (name, address) VALUES (%s, %s)"
                 first = False
@@ -182,7 +187,7 @@ class MySQLUtils:
                     first = True
                 sql += ")"
                 values = tuple([v for v in values if v != ""])
-                types = [column for column in self.get_table_columns(table_name)]
+                types = [column for column in self.get_table_columns(database_name, table_name)]
                 values = sql_to_python(values, types)
 
                 self.mycursor.execute(sql, values)
@@ -208,7 +213,7 @@ class MySQLUtils:
                     sql += column + " = " + "%s"
                     sql_values.append(str(values[index]))
                 sql += " WHERE "
-                columns_data = [column for column in self.get_table_columns(table_name)]
+                columns_data = [column for column in self.get_table_columns(database_name, table_name)]
                 first = False
                 for index, column in enumerate(columns_data):
                     if column[3] == "PRI":

@@ -1,4 +1,3 @@
-# from dialog_select import DialogSelect
 from PyQt5 import QtWidgets
 from utils.mysql_utils import MySQLUtils
 from data_handler_dialog.table_reference_spec import load_spec
@@ -22,7 +21,7 @@ class DataHandlerDialog(QtWidgets.QDialog):
             # print("table spec", table_spec)
 
         columns = [column[0]
-                   for column in self.mySQL_utils.get_table_columns(table_name)]
+                   for column in self.mySQL_utils.get_table_columns(db_name, table_name)]
         self.db_name = db_name
         self.table_name = table_name
         self.columns = columns
@@ -96,6 +95,7 @@ class DataHandlerDialog(QtWidgets.QDialog):
         self.mySQL_utils.insert(
             self.db_name, self.table_name, self.columns, values, self.statusBar)
         self.clear_all()
+        self.close()
 
     def update(self):
         values = tuple([text.text().strip() for text in self.texts])

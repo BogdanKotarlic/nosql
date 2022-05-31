@@ -41,9 +41,9 @@ class DialogSelect(QtWidgets.QDialog):
 
 
 
-        self.data = self.mySQL_utils.get_table_data(table_name)
+        self.data = self.mySQL_utils.get_table_data(db_name, table_name)
         self.columns = [column[0]
-                   for column in self.mySQL_utils.get_table_columns(table_name)]
+                   for column in self.mySQL_utils.get_table_columns(db_name, table_name)]
         num_rows = len(self.data)
         if num_rows > 0:
             num_cols = len(self.data[0])
