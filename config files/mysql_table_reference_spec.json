@@ -42,5 +42,21 @@
     "zaposleni_id": ["zaposleni", "zaposleni_id"],
     "tim_id": ["tim", "tim_id"],
     "freelancer": ["freelancer", "freelancer_id"]
+  },
+  "vestina_coveka": {
+    "vestina_id": ["vestina", "vestina_id"],
+    "nivo_vestine_id": ["nivo_vestina", "nivo_vestina_id"],
+    "covek_id": ["covek", "covek_id"]
+  },
+  "clan_tima_ima_aktivnost": {
+    "clan_tima_id": ["clan_tima", "clan_tima_id"],
+    "task_u_sprintu_id": ["task_u_sprintu", "task_u_sprintu_id"]
+  },
+  "partner_na_projektu": {
+    "projekat_id": ["projekat", "projekat_id"],
+    "kompanija_id": ["kompanija", "kompanija_id"]
+  },
+  "freelancer": {
+    "covek_id": ["covek", "covek_id"]
   }
 }

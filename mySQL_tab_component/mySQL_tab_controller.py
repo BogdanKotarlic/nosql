@@ -21,18 +21,18 @@ class MySQLTabController:
 
     def show_data_handler_dialog(self, database_name, table_name, mode, dataTableWidget, statusBar):
         if mode == "insert":
-            dlg = DataHandlerDialog(database_name, table_name, None, mode, statusBar)
+            dlg = DataHandlerDialog(database_name, table_name, None, mode, statusBar, dataTableWidget, self, self.mySQL_tab_model)
             dlg.exec()
-            self.load_table_data(database_name, table_name, dataTableWidget)
+            # self.load_table_data(database_name, table_name, dataTableWidget)
         elif mode == "update":
             data = [record for record in self.mySQL_utils.get_table_data(database_name, table_name)]
             selected_indexes = dataTableWidget.selectedIndexes()
             for s in selected_indexes:
-                dlg = DataHandlerDialog(database_name, table_name, data[s.row()], mode, statusBar)
+                dlg = DataHandlerDialog(database_name, table_name, data[s.row()], mode, statusBar, dataTableWidget, self, self.mySQL_tab_model)
                 dlg.exec()
-            self.load_table_data(database_name, table_name, dataTableWidget)
+            # self.load_table_data(database_name, table_name, dataTableWidget)
         elif mode == "search":
-            dlg = DataHandlerDialog(database_name, table_name, None, mode, statusBar)
+            dlg = DataHandlerDialog(database_name, table_name, None, mode, statusBar, dataTableWidget, self, self.mySQL_tab_model)
             closed = dlg.exec()
-            if not closed:
-                self.mySQL_tab_model.load_table_data(database_name, table_name, dataTableWidget, dlg.get_search_results())
+            # if not closed:
+                # self.mySQL_tab_model.load_table_data(database_name, table_name, dataTableWidget, dlg.get_search_results())

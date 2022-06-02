@@ -7,12 +7,15 @@ from data_handler_dialog.dialog_select import DialogSelect
 
 
 class DataHandlerDialog(QtWidgets.QDialog):
-    def __init__(self, db_name, table_name, data, mode, statusBar, parent=None):
+    def __init__(self, db_name, table_name, data, mode, statusBar, dataTableWidget, tab_controller, tab_model, parent=None):
         super().__init__(parent=parent)
-
+        self.move(1400, 200)
         self.new = None
         self.mySQL_utils = MySQLUtils()
         self.statusBar = statusBar
+        self.tab_controller = tab_controller
+        self.tab_model = tab_model
+        self.dataTableWidget = dataTableWidget 
 
         mysql_spec = load_spec()
         table_spec = {}
@@ -95,13 +98,15 @@ class DataHandlerDialog(QtWidgets.QDialog):
         self.mySQL_utils.insert(
             self.db_name, self.table_name, self.columns, values, self.statusBar)
         self.clear_all()
-        self.close()
+        self.tab_controller.load_table_data(self.db_name, self.table_name, self.dataTableWidget)
+        # self.close()
 
     def update(self):
         values = tuple([text.text().strip() for text in self.texts])
         self.mySQL_utils.update(
             self.db_name, self.table_name, self.columns, values, self.statusBar)
-        self.close()
+        self.tab_controller.load_table_data(self.db_name, self.table_name, self.dataTableWidget)
+        # self.close()
 
     def clear_all(self):
         for t in self.texts:
@@ -112,7 +117,8 @@ class DataHandlerDialog(QtWidgets.QDialog):
         results = self.mySQL_utils.search(
             self.db_name, self.table_name, self.columns, values)
         self.search_results = [result for result in results]
-        self.close()
+        self.tab_model.load_table_data(self.db_name, self.table_name, self.dataTableWidget, self.get_search_results())
+        # self.close()
 
     def get_search_results(self):
         return self.search_results
