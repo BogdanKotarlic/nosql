@@ -27,8 +27,8 @@ class MainWindowController:
             if current_database_name != "none":
                 self.main_window_model.load_collections(current_database_name, collectionsComboBox)
 
-    def delete_row(self, databaseDataTableWidget, database_name, collection_name):
-        self.main_window_model.delete_row(databaseDataTableWidget, database_name, collection_name)
+    # def delete_row(self, databaseDataTableWidget, database_name, collection_name):
+    #     self.main_window_model.delete_row(databaseDataTableWidget, database_name, collection_name)
  
     def add_mysql_table_tab(self, treeItem, column, dataTabWidget, statusBar):
         table_name = treeItem.text(column)

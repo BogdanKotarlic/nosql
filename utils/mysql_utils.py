@@ -124,7 +124,11 @@ class MySQLUtils:
             print(collection_name in contained_data)
             if collection_name not in contained_data:
                 try:
-                    sql = "DELETE FROM %s WHERE id = %s" % (collection_name, row_id)
+                    column_id_name = self.get_table_columns(database_name, collection_name)[0][0]
+                    # print(column_id_name)
+                    sql = "USE %s" % database_name
+                    self.mycursor.execute(sql)
+                    sql = "DELETE FROM %s WHERE %s = %s" % (collection_name, column_id_name, row_id)
                     self.mycursor.execute(sql)
                     self.mydb.commit()
                     return True
@@ -167,6 +171,8 @@ class MySQLUtils:
         def insert(self, database_name, table_name, columns, values, statusBar):
             # id je neophodno staviti ako id nije autoinkrement
             try:
+                sql = "USE %s" % database_name
+                self.mycursor.execute(sql)
                 sql = "INSERT INTO " + table_name + "("  # (name, address) VALUES (%s, %s)"
                 first = False
                 for index, column in enumerate(columns):
@@ -189,7 +195,7 @@ class MySQLUtils:
                 values = tuple([v for v in values if v != ""])
                 types = [column for column in self.get_table_columns(database_name, table_name)]
                 values = sql_to_python(values, types)
-
+                # print(sql)
                 self.mycursor.execute(sql, values)
                 self.mydb.commit()
                 statusBar.showMessage("Insert successful.")
@@ -205,6 +211,8 @@ class MySQLUtils:
 
         def update(self, database_name, table_name, columns, values, statusBar):
             try:
+                sql = "USE %s" % database_name
+                self.mycursor.execute(sql)
                 sql = "UPDATE " + table_name + " SET "
                 sql_values = []
                 for index, column in enumerate(columns):
@@ -222,6 +230,7 @@ class MySQLUtils:
                         sql += columns[index] + " = " + "%s"
                         sql_values.append(str(values[index]))
                         first = True
+                print("query je: ", sql, sql_values)
                 self.mycursor.execute(sql, sql_values)
                 self.mydb.commit()
                 statusBar.showMessage("Update successful.")
@@ -237,6 +246,8 @@ class MySQLUtils:
 
         def search(self, database_name, table_name, columns, values):
             try:
+                sql = "USE %s" % database_name
+                self.mycursor.execute(sql)
                 sql = "SELECT * FROM " + table_name + " WHERE "
                 sql_values = []
                 for index, column in enumerate(columns):

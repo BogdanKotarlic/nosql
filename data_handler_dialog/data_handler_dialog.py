@@ -126,16 +126,16 @@ class DataHandlerDialog(QtWidgets.QDialog):
             self.texts[self.columns.index(column)].setText(str(selected))
 
     def new_dialog(self, ref_table, ref_column, column):
-        dlg = DataHandlerDialog(self.db_name, ref_table, ref_column, "new")
+        dlg = DataHandlerDialog(self.db_name, ref_table, ref_column, "new", self.statusBar)
         closed = dlg.exec()
         if not closed:
             new = dlg.get_new()
             self.texts[self.columns.index(column)].setText(str(new))
 
-    # def insert_new(self, column):
-    #     self.new = self.texts[self.columns.index(column)].text().strip()
-    #     self.insert()
-    #     self.close()
+    def insert_new(self, column):
+        self.new = self.texts[self.columns.index(column)].text().strip()
+        self.insert()
+        self.close()
 
-    # def get_new(self):
-    #     return self.new
+    def get_new(self):
+        return self.new

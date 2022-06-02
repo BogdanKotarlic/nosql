@@ -1,5 +1,46 @@
 {
   "auto": {
     "vlasnik_id": ["vlasnik", "id"]
+  },
+  "tim": {
+    "projekat_id": ["projekat", "projekat_id"]
+  },
+  "projekat": {
+    "kompanija_id": ["kompanija", "kompanija_id"]
+  },
+  "sastav_projekta": {
+    "projekat_id": ["projekat", "projekat_id"],
+    "pod_projekat_id": ["projekat", "projekat_id"]
+  },
+  "etapa_projekta": {
+    "projekat_id": ["projekat", "projekat_id"]
+  },
+  "sprint": {
+    "etapa_projekta_id": ["etapa_projekta", "etapa_projekta_id"]
+  },
+  "task": {
+    "etapa_projekta_id": ["etapa_projekta", "etapa_projekta_id"]
+  },
+  "task_u_sprintu": {
+    "task_id": ["task", "task_id"],
+    "sprint_id": ["sprint", "sprint_id"]
+  },
+  "kompanija": {
+    "naseljeno_mesto_id": ["naseljeno_mesto", "naseljeno_mesto_id"]
+  },
+  "naseljeno_mesto": {
+    "drzava_id": ["drzava", "drzava_id"]
+  },
+  "covek": {
+    "naseljeno_mesto_id": ["naseljeno_mesto", "naseljeno_mesto_id"]
+  },
+  "zaposleni": {
+    "covek_id": ["covek", "covek_id"],
+    "kompanija_id": ["kompanija", "kompanija_id"]
+  },
+  "clan_tima": {
+    "zaposleni_id": ["zaposleni", "zaposleni_id"],
+    "tim_id": ["tim", "tim_id"],
+    "freelancer": ["freelancer", "freelancer_id"]
   }
 }

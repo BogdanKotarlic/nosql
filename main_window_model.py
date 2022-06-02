@@ -68,3 +68,7 @@ class MainWindowModel:
         mySQL_tab_viewer = MySQLTabViewer(database_name, table_name, statusBar)
         dataTabWidget.addTab(mySQL_tab_viewer, table_name)
         dataTabWidget.setCurrentWidget(mySQL_tab_viewer)
+
+    # def delete_row(self, databaseDataTableWidget, database_name, collection_name):
+    #     row_id = databaseDataTableWidget
+    #     self.mySQL_utils.delete_row(database_name, collection_name, )
