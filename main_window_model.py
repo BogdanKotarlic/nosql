@@ -4,10 +4,12 @@ from PyQt5.QtCore import Qt
 
 from utils.mysql_utils import MySQLUtils
 from mySQL_tab_component.mySQL_tab_viewer import MySQLTabViewer
+from utils.mongo_utils import MongoUtils
 
 class MainWindowModel:
     def __init__(self):
         self.mySQL_utils = MySQLUtils()
+        self.mongo_utils = MongoUtils()
     
     def load_and_connect_mysql_db(self, mySQLTreeWidget, statusBar):
         self.mySQL_utils.load_and_connect_db(statusBar)
@@ -15,6 +17,7 @@ class MainWindowModel:
         self.fill_mysql_tree(mySQLTreeWidget)
 
     def load_and_connect_mongodb(self, mongoDBTreeWidget, statusBar):
+        self.mongo_utils.load_and_connect_db(statusBar)
         print("test test")
 
     def create_mysql_database(self, new_database_name, mySQLTreeWidget, statusBar):
