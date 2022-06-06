@@ -13,6 +13,9 @@ class MainWindowController:
 
     def load_and_connect_mysql_db(self, mySQLTreeWidget, statusBar):
         self.main_window_model.load_and_connect_mysql_db(mySQLTreeWidget, statusBar)
+
+    def load_and_connect_mongodb(self, mongoDBTreeWidget, statusBar):
+        self.main_window_model.load_and_connect_mongodb(mongoDBTreeWidget, statusBar)
     
     def create_mysql_database(self, newMySQLNameLineEdit, mySQLTreeWidget, statusBar):
         new_database_name = newMySQLNameLineEdit.text()

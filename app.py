@@ -55,8 +55,23 @@ class MainWindowViewer(object):
         # Mongo deo u databasesTabWidget-u
         self.mongoTab = QtWidgets.QWidget()
         self.mongoTab.setObjectName("mongoTab")
+        self.verticalLayoutWidgetDB = QtWidgets.QWidget(self.mongoTab)
+        self.verticalLayoutWidgetDB.setGeometry(QtCore.QRect(2, 5, 231, 471))
+        self.verticalLayoutWidgetDB.setObjectName("verticalLayoutWidgetDB")
+        self.mongoDBVerticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidgetDB)
+        self.mongoDBVerticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.mongoDBVerticalLayout.setObjectName("mongoDBVerticalLayout")
+        #   Deo za prikaz baze i tabela
+        self.mongoDBTreeWidget = QtWidgets.QTreeWidget(self.verticalLayoutWidgetDB)
+        self.mongoDBTreeWidget.setObjectName("mongoDBTreeWidget")
+        self.mongoDBTreeWidget.headerItem().setText(0, "Databases:")
+        self.mongoDBTreeWidget.setColumnCount(1)
+        self.mongoDBVerticalLayout.addWidget(self.mongoDBTreeWidget)
+        #   Akcije: konekcija
+        self.connectmongoDBPushButton = QtWidgets.QPushButton(self.verticalLayoutWidgetDB)
+        self.connectmongoDBPushButton.setObjectName("connectmongoDBPushButton")
+        self.mongoDBVerticalLayout.addWidget(self.connectmongoDBPushButton)
         self.databasesTabWidget.addTab(self.mongoTab, "")
-
         #   Ovde ide Mongo deo za prikaz baza, tabela i akcije
 
         # Arango deo u databasesTabWidget-u
@@ -83,19 +98,22 @@ class MainWindowViewer(object):
 
         # connections
         self.connectMySQLDBPushButton.clicked.connect(lambda x: self.main_window_controller.load_and_connect_mysql_db(self.mySQLTreeWidget, self.statusbar))
- 
+        self.connectmongoDBPushButton.clicked.connect(lambda x: self.main_window_controller.load_and_connect_mongodb(self.mongoDBTreeWidget, self.statusbar))
+
         self.deleteMySQLDBPushButton.clicked.connect(lambda x: self.main_window_controller.delete_selected_mysql_database(self.mySQLTreeWidget, self.statusbar))
         self.createMySQLDBPushButton.clicked.connect(lambda x: self.main_window_controller.create_mysql_database(self.newMySQLNameLineEdit, self.mySQLTreeWidget, self.statusbar))
         
         self.dataTabWidget.tabCloseRequested.connect(lambda x: self.main_window_controller.close_tab(x, self.dataTabWidget))
 
         self.mySQLTreeWidget.itemDoubleClicked.connect(lambda y, x: self.main_window_controller.add_mysql_table_tab(y, x, self.dataTabWidget, self.statusbar))
+        
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "SmartMan"))
 
         self.connectMySQLDBPushButton.setText(_translate("MainWindow", "Connect Database"))
+        self.connectmongoDBPushButton.setText(_translate("MainWindow", "Connect MongoDB"))
         self.deleteMySQLDBPushButton.setText(_translate("MainWindow", "Delete Selected Database"))
         self.newMySQLNameLineEdit.setPlaceholderText(_translate("MainWindow", "New Database Name"))
         self.createMySQLDBPushButton.setText(_translate("MainWindow", "Create"))

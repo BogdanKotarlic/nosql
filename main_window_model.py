@@ -14,6 +14,9 @@ class MainWindowModel:
 
         self.fill_mysql_tree(mySQLTreeWidget)
 
+    def load_and_connect_mongodb(self, mongoDBTreeWidget, statusBar):
+        print("test test")
+
     def create_mysql_database(self, new_database_name, mySQLTreeWidget, statusBar):
         matched_items = mySQLTreeWidget.findItems(new_database_name, Qt.MatchContains, 0)
         if len(matched_items) > 0:
@@ -53,16 +56,20 @@ class MainWindowModel:
         mySQLTreeWidget.clear()
 
         databases_typle = self.mySQL_utils.get_all_databases()
-        for database in databases_typle:
-            database_item = QTreeWidgetItem(mySQLTreeWidget)
-            database_name = database[0]
-            database_item.setText(0, database_name)
-            table_names_typle = self.mySQL_utils.get_all_tables(database_name)
 
-            for table in table_names_typle:
-                table_item = QTreeWidgetItem(database_item)
-                table_name = table[0]
-                table_item.setText(0, table_name)
+        if databases_typle is None:
+            return
+        else:
+            for database in databases_typle:
+                database_item = QTreeWidgetItem(mySQLTreeWidget)
+                database_name = database[0]
+                database_item.setText(0, database_name)
+                table_names_typle = self.mySQL_utils.get_all_tables(database_name)
+
+                for table in table_names_typle:
+                    table_item = QTreeWidgetItem(database_item)
+                    table_name = table[0]
+                    table_item.setText(0, table_name)
 
     def add_mysql_table_tab(self, database_name, table_name, dataTabWidget, statusBar):
         mySQL_tab_viewer = MySQLTabViewer(database_name, table_name, statusBar)
