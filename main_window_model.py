@@ -16,10 +16,6 @@ class MainWindowModel:
 
         self.fill_mysql_tree(mySQLTreeWidget)
 
-    def load_and_connect_mongodb(self, mongoDBTreeWidget, statusBar):
-        self.mongo_utils.load_and_connect_db(statusBar)
-        print("test test")
-
     def create_mysql_database(self, new_database_name, mySQLTreeWidget, statusBar):
         matched_items = mySQLTreeWidget.findItems(new_database_name, Qt.MatchContains, 0)
         if len(matched_items) > 0:
@@ -50,10 +46,10 @@ class MainWindowModel:
         
         self.fill_mysql_tree(mySQLTreeWidget)
 
-    def load_collections(self, current_database_name, collectionsComboBox):
-        table_names_typle = self.mySQL_utils.get_all_tables(current_database_name)
-        collectionsComboBox.clear()
-        collectionsComboBox.addItems([table_name[0] for table_name in table_names_typle])
+    # def load_collections(self, current_database_name, collectionsComboBox):
+    #     table_names_typle = self.mySQL_utils.get_all_tables(current_database_name)
+    #     collectionsComboBox.clear()
+    #     collectionsComboBox.addItems([table_name[0] for table_name in table_names_typle])
 
     def fill_mysql_tree(self, mySQLTreeWidget):
         mySQLTreeWidget.clear()
@@ -78,6 +74,48 @@ class MainWindowModel:
         mySQL_tab_viewer = MySQLTabViewer(database_name, table_name, statusBar)
         dataTabWidget.addTab(mySQL_tab_viewer, table_name)
         dataTabWidget.setCurrentWidget(mySQL_tab_viewer)
+
+    #Mongo load and connect database
+    def load_and_connect_mongodb(self, mongoDBTreeWidget, statusBar):
+        self.mongo_utils.load_and_connect_db(statusBar)
+
+        self.fill_mongo_tree(mongoDBTreeWidget)
+
+    #Mongo - fill tree view with elements
+
+    def fill_mongo_tree(self, mongoDBTreeWidget):
+        mongoDBTreeWidget.clear()
+
+        databases = self.mongo_utils.get_all_databases()
+        if databases == None:
+            return
+        else:
+            for database_name in databases:
+                mongo_database_item = QTreeWidgetItem(mongoDBTreeWidget)
+                mongo_database_item.setText(0, database_name)
+                mongo_db_collections = self.mongo_utils.get_all_tables(database_name)
+                collections = self.mongo_utils.get_all_tables(database_name)
+
+                for collection in collections:
+                    collection_item = QTreeWidgetItem(mongo_database_item)
+                    collection_item.setText(0, collection)
+
+    def delete_selected_mongodb(self, mongoDBTreeWidget, statusBar):
+        selected_items = mongoDBTreeWidget.selectedItems()
+        if len(selected_items) == 0:
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Information)
+            msg.setText("You need to select database before deleting it.")
+            msg.setWindowTitle("Info")
+            msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+            msg.exec_()
+        else:
+            for selected_item in selected_items:
+                database_name = selected_item.text(0)
+                self.mongo_utils.delete_database(database_name, statusBar)
+            
+            self.fill_mongo_tree(mongoDBTreeWidget)
+
 
     # def delete_row(self, databaseDataTableWidget, database_name, collection_name):
     #     row_id = databaseDataTableWidget

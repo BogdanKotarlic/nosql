@@ -110,8 +110,7 @@ class MainWindowViewer(object):
 
         # connections
         self.connectMySQLDBPushButton.clicked.connect(lambda x: self.main_window_controller.load_and_connect_mysql_db(self.mySQLTreeWidget, self.statusbar))
-        self.connectmongoDBPushButton.clicked.connect(lambda x: self.main_window_controller.load_and_connect_mongodb(self.mongoDBTreeWidget, self.statusbar))
-
+        
         self.deleteMySQLDBPushButton.clicked.connect(lambda x: self.main_window_controller.delete_selected_mysql_database(self.mySQLTreeWidget, self.statusbar))
         self.createMySQLDBPushButton.clicked.connect(lambda x: self.main_window_controller.create_mysql_database(self.newMySQLNameLineEdit, self.mySQLTreeWidget, self.statusbar))
         
@@ -119,6 +118,10 @@ class MainWindowViewer(object):
 
         self.mySQLTreeWidget.itemDoubleClicked.connect(lambda y, x: self.main_window_controller.add_mysql_table_tab(y, x, self.dataTabWidget, self.statusbar))
         
+        #Mongo connections and actions on databases
+        self.connectmongoDBPushButton.clicked.connect(lambda x: self.main_window_controller.load_and_connect_mongodb(self.mongoDBTreeWidget, self.statusbar))
+
+        self.deleteMongoDBPushButton.clicked.connect(lambda x: self.main_window_controller.delete_selected_mongodb(self.mongoDBTreeWidget, self.statusbar))
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
