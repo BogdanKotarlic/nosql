@@ -80,6 +80,28 @@ class MainWindowModel:
         self.mongo_utils.load_and_connect_db(statusBar)
 
         self.fill_mongo_tree(mongoDBTreeWidget)
+    
+    def create_mongo_database(self, new_database_name, mongoDBTreeWidget, statusBar):
+        matched_items = mongoDBTreeWidget.findItems(new_database_name, Qt.MatchContains, 0)
+        if len(matched_items) > 0:
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Information)
+            msg.setText("Database with that name already exists.")
+            msg.setWindowTitle("Info")
+            msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+            msg.exec_()
+
+        elif new_database_name == "":
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Information)
+            msg.setText("Database name not set.")
+            msg.setWindowTitle("Info")
+            msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+            msg.exec_()
+
+        #elif self.mySQL_utils.check_connection():
+        self.mongo_utils.create_database(new_database_name, statusBar)
+        self.fill_mongo_tree(mongoDBTreeWidget)
 
     #Mongo - fill tree view with elements
 

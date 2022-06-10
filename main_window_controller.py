@@ -46,3 +46,8 @@ class MainWindowController:
     
     def delete_selected_mongodb(self, mongoDBTreeWidget, statusBar):
         self.main_window_model.delete_selected_mongodb(mongoDBTreeWidget, statusBar)
+    
+    def create_mongo_database(self, newMongoNameLineEdit, mongoDBTreeWidget, statusBar):
+        new_database_name = newMongoNameLineEdit.text()
+        newMongoNameLineEdit.clear()
+        self.main_window_model.create_mongo_database(new_database_name, mongoDBTreeWidget, statusBar)

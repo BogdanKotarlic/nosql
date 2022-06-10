@@ -1,3 +1,4 @@
+from hashlib import new
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMessageBox
 import pymongo
@@ -9,7 +10,6 @@ class MongoUtils:
     class __MongoUtils:
         def __init__(self):
             self.mydb = None
-            #self.mycursor = None
         
         def load_and_connect_db(self, statusBar):
             dialog = QtWidgets.QFileDialog()
@@ -29,6 +29,18 @@ class MongoUtils:
                 except Exception as e:
                     print(e)
                     statusBar.showMessage("Error In Connection")  
+        
+        def create_database(self, new_database_name, statusBar):
+            try:
+                #dodat test jer drugacije mongodb ne moze kreirati novu db
+                new_db = self.mydb[new_database_name]
+                test = new_db.test
+                tes = {}
+                test.insert_one(tes)
+                statusBar.showMessage("New Database Created.")
+            except Exception as e:
+                print(e)
+                statusBar.showMessage("Creating new database failed.")
 
         def get_all_databases(self):
             databases = []
