@@ -1,7 +1,4 @@
 {
-  "auto": {
-    "vlasnik_id": ["vlasnik", "id"]
-  },
   "tim": {
     "projekat_id": ["projekat", "projekat_id"]
   },
@@ -15,15 +12,22 @@
   "etapa_projekta": {
     "projekat_id": ["projekat", "projekat_id"]
   },
-  "sprint": {
+  "sprint_plan": {
     "etapa_projekta_id": ["etapa_projekta", "etapa_projekta_id"]
   },
-  "task": {
-    "etapa_projekta_id": ["etapa_projekta", "etapa_projekta_id"]
+  "sprint_realizacija": {
+    "sprint_plan_id": ["sprint_plan", "sprint_id"]
+  },
+  "task_u_etapi": {
+    "etapa_projekta_id": ["etapa_projekta", "etapa_projekta_id"],
+    "task_id": ["task", "task_id"]
   },
   "task_u_sprintu": {
     "task_id": ["task", "task_id"],
-    "sprint_id": ["sprint", "sprint_id"]
+    "sprint_plan_id": ["sprint_plan", "sprint_id"]
+  },
+  "task_realizacija": {
+    "task_u_sprintu_id": ["task_u_sprintu", "task_u_sprintu_id"]
   },
   "kompanija": {
     "naseljeno_mesto_id": ["naseljeno_mesto", "naseljeno_mesto_id"]
@@ -31,22 +35,25 @@
   "naseljeno_mesto": {
     "drzava_id": ["drzava", "drzava_id"]
   },
-  "covek": {
+  "ljudski_resursi": {
     "naseljeno_mesto_id": ["naseljeno_mesto", "naseljeno_mesto_id"]
   },
   "zaposleni": {
-    "covek_id": ["covek", "covek_id"],
+    "covek_id": ["ljudski_resursi", "covek_id"],
     "kompanija_id": ["kompanija", "kompanija_id"]
+  },
+  "freelancer": {
+    "covek_id": ["ljudski_resursi", "covek_id"]
   },
   "clan_tima": {
     "zaposleni_id": ["zaposleni", "zaposleni_id"],
     "tim_id": ["tim", "tim_id"],
-    "freelancer": ["freelancer", "freelancer_id"]
+    "freelancer_id": ["freelancer", "freelancer_id"]
   },
-  "vestina_coveka": {
+  "vestine_coveka": {
     "vestina_id": ["vestina", "vestina_id"],
-    "nivo_vestine_id": ["nivo_vestina", "nivo_vestina_id"],
-    "covek_id": ["covek", "covek_id"]
+    "nivo_vestine_id": ["nivo_vestina", "nivo_vestine_id"],
+    "covek_id": ["ljudski_resursi", "covek_id"]
   },
   "clan_tima_ima_aktivnost": {
     "clan_tima_id": ["clan_tima", "clan_tima_id"],
@@ -54,9 +61,7 @@
   },
   "partner_na_projektu": {
     "projekat_id": ["projekat", "projekat_id"],
-    "kompanija_id": ["kompanija", "kompanija_id"]
-  },
-  "freelancer": {
-    "covek_id": ["covek", "covek_id"]
+    "projekat_vlasnik_kompanija_id": ["projekat", "kompanija_id"],
+    "partner_kompanija_id": ["kompanija", "kompanija_id"]
   }
 }
