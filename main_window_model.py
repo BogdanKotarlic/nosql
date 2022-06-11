@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMessageBox, QTreeWidgetItem
 from PyQt5.QtCore import Qt
+from mongoDB_component.mongoDB_viewer import MongoTabViewer
 
 from utils.mysql_utils import MySQLUtils
 from mySQL_tab_component.mySQL_tab_viewer import MySQLTabViewer
@@ -75,6 +76,7 @@ class MainWindowModel:
         dataTabWidget.addTab(mySQL_tab_viewer, table_name)
         dataTabWidget.setCurrentWidget(mySQL_tab_viewer)
 
+
     #Mongo load and connect database
     def load_and_connect_mongodb(self, mongoDBTreeWidget, statusBar):
         self.mongo_utils.load_and_connect_db(statusBar)
@@ -121,6 +123,11 @@ class MainWindowModel:
                 for collection in collections:
                     collection_item = QTreeWidgetItem(mongo_database_item)
                     collection_item.setText(0, collection)
+    
+    def add_mongo_table_tab(self, database_name, table_name, dataTabWidget, statusBar):
+        mongoDB_viewer = MongoTabViewer(database_name, table_name, statusBar)
+        dataTabWidget.addTab(mongoDB_viewer, table_name)
+        dataTabWidget.setCurrentWidget(mongoDB_viewer)
 
     def delete_selected_mongodb(self, mongoDBTreeWidget, statusBar):
         selected_items = mongoDBTreeWidget.selectedItems()

@@ -4,7 +4,6 @@ from PyQt5.QtWidgets import QMessageBox
 import pymongo
 
 from utils.load_config import load_config
-from utils.datatypes import sql_to_python
 
 class MongoUtils:
     class __MongoUtils:
@@ -64,6 +63,24 @@ class MongoUtils:
                 collections.append(i)
 
             return collections
+        
+        def get_table_data(self, database_name):
+            try:
+                #table_data = []
+                #for i in self.mydb[database_name].list_collection_names():
+                 #   table_data.append(i)
+                #return table_data
+                db = self.mydb[database_name]
+                col = db[database_name]
+                return col.find
+            except Exception as e:
+                print(e)
+                msg = QMessageBox()
+                msg.setIcon(QMessageBox.Information)
+                msg.setText("Getting table data failed.")
+                msg.setWindowTitle("Info")
+                msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+                msg.exec_()
 
         
         def delete_database(self, mongodb_name, statusBar):

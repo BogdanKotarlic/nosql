@@ -36,6 +36,12 @@ class MainWindowController:
         if treeItem.parent() != None:
             database_name = treeItem.parent().text(column)
             self.main_window_model.add_mysql_table_tab(database_name, table_name, dataTabWidget, statusBar)
+    
+    def add_mongo_table_tab(self, treeItem, column, dataTabWidget, statusBar):
+        table_name = treeItem.text(column)
+        if treeItem.parent() != None:
+            database_name = treeItem.parent().text(column)
+            self.main_window_model.add_mongo_table_tab(database_name, table_name, dataTabWidget, statusBar)
 
     def close_tab(self, tab_index, dataTabWidget):
         dataTabWidget.removeTab(tab_index)

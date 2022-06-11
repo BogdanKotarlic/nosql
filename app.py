@@ -124,6 +124,9 @@ class MainWindowViewer(object):
         self.deleteMongoDBPushButton.clicked.connect(lambda x: self.main_window_controller.delete_selected_mongodb(self.mongoDBTreeWidget, self.statusbar))
         self.createMongoDBPushButton.clicked.connect(lambda x: self.main_window_controller.create_mongo_database(self.newMongoNameLineEdit, self.mongoDBTreeWidget, self.statusbar))
    
+        self.mongoDBTreeWidget.itemDoubleClicked.connect(lambda y, x: self.main_window_controller.add_mongo_table_tab(y, x, self.dataTabWidget, self.statusbar))
+
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "SmartMan"))
