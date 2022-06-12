@@ -1,8 +1,12 @@
+from lib2to3.pytree import convert
+from textwrap import indent
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QMessageBox, QTreeWidgetItem
+from PyQt5.QtWidgets import QMessageBox, QTreeWidgetItem, QListView
 from PyQt5.QtCore import Qt
 
 from utils.mongo_utils import MongoUtils
+import json
+from bson.json_util import loads, dumps
 
 class MongoTabModel: 
     def __init__(self):
@@ -10,19 +14,13 @@ class MongoTabModel:
 
     def load_table_data(self, database_name, table_name, dataTableWidget, table_data=None):
         if table_data == None:
-            table_data = self.mongo_utils.get_table_data(database_name)
+            table_data = self.mongo_utils.get_table_data(database_name, table_name)
         
-        #table_row_count = len(table_data)
+        data = []
+        for i in table_data:
+            data.append(i)
 
-        #table_columns = self.mongo_utils.get_table_columns(database_name, table_name)
+        converted = dumps(data, indent=4, sort_keys=True)
 
-        #table_column_names = [table_name[0] for table_name in table_columns]
-        #table_column_count = len(table_column_names)
-
-        #dataTableWidget.setRowCount(table_row_count)
-        #dataTableWidget.setColumnCount(table_column_count)
-        #dataTableWidget.setHorizontalHeaderLabels(table_column_names)
-
-        #for row in range(table_row_count):
-            #for column in range(table_column_count):
-                #dataTableWidget.setItem(row, column, QtWidgets.QTableWidgetItem(str(table_data[row][column])))
+        dataTableWidget.addItem(converted)
+    

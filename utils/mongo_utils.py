@@ -64,15 +64,11 @@ class MongoUtils:
 
             return collections
         
-        def get_table_data(self, database_name):
+        def get_table_data(self, database_name, table_name):
             try:
-                #table_data = []
-                #for i in self.mydb[database_name].list_collection_names():
-                 #   table_data.append(i)
-                #return table_data
                 db = self.mydb[database_name]
-                col = db[database_name]
-                return col.find
+                col = db[table_name]
+                return col.find()
             except Exception as e:
                 print(e)
                 msg = QMessageBox()
