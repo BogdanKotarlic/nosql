@@ -57,3 +57,6 @@ class MainWindowController:
         new_database_name = newMongoNameLineEdit.text()
         newMongoNameLineEdit.clear()
         self.main_window_model.create_mongo_database(new_database_name, mongoDBTreeWidget, statusBar)
+
+    def transform_from_sql_to_mongo(self, mongoDBTreeWidget, statusBar):
+        self.main_window_model.transform_to_mongo(mongoDBTreeWidget, statusBar)

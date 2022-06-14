@@ -68,10 +68,15 @@ class MainWindowViewer(object):
         self.mongoDBTreeWidget.setColumnCount(1)
         self.mongoDBVerticalLayout.addWidget(self.mongoDBTreeWidget)
         #   Akcije: konekcija
+        self.horizontal = QtWidgets.QHBoxLayout()
+        self.horizontal.setObjectName("horizontallayoutforbuttons")
         self.connectmongoDBPushButton = QtWidgets.QPushButton(self.verticalLayoutWidgetDB)
         self.connectmongoDBPushButton.setObjectName("connectmongoDBPushButton")
-        self.mongoDBVerticalLayout.addWidget(self.connectmongoDBPushButton)
-        self.databasesTabWidget.addTab(self.mongoTab, "")
+        self.transformButton = QtWidgets.QPushButton(self.verticalLayoutWidgetDB)
+        self.transformButton.setObjectName("transformmongoDBPushButton")
+        self.horizontal.addWidget(self.transformButton)
+        self.horizontal.addWidget(self.connectmongoDBPushButton)
+        self.mongoDBVerticalLayout.addLayout(self.horizontal)
         self.deleteMongoDBPushButton = QtWidgets.QPushButton(self.verticalLayoutWidget)
         self.deleteMongoDBPushButton.setObjectName("deleteMongoDBPushButton")
         self.mongoDBVerticalLayout.addWidget(self.deleteMongoDBPushButton)
@@ -119,6 +124,8 @@ class MainWindowViewer(object):
         self.mySQLTreeWidget.itemDoubleClicked.connect(lambda y, x: self.main_window_controller.add_mysql_table_tab(y, x, self.dataTabWidget, self.statusbar))
         
         #Mongo connections and actions on databases
+        self.transformButton.clicked.connect(lambda x: self.main_window_controller.transform_from_sql_to_mongo(self.mongoDBTreeWidget, self.statusbar))
+        
         self.connectmongoDBPushButton.clicked.connect(lambda x: self.main_window_controller.load_and_connect_mongodb(self.mongoDBTreeWidget, self.statusbar))
 
         self.deleteMongoDBPushButton.clicked.connect(lambda x: self.main_window_controller.delete_selected_mongodb(self.mongoDBTreeWidget, self.statusbar))
@@ -132,7 +139,8 @@ class MainWindowViewer(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "SmartMan"))
 
         self.connectMySQLDBPushButton.setText(_translate("MainWindow", "Connect Database"))
-        self.connectmongoDBPushButton.setText(_translate("MainWindow", "Connect MongoDB"))
+        self.connectmongoDBPushButton.setText(_translate("MainWindow", "Connect Mongo"))
+        self.transformButton.setText(_translate("MainWindow", "TransformToMongo"))
         self.deleteMySQLDBPushButton.setText(_translate("MainWindow", "Delete Selected Database"))
         self.deleteMongoDBPushButton.setText(_translate("MainWindow", "Delete Selected MongoDB"))
         self.newMySQLNameLineEdit.setPlaceholderText(_translate("MainWindow", "New Database Name"))

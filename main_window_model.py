@@ -146,6 +146,23 @@ class MainWindowModel:
             self.fill_mongo_tree(mongoDBTreeWidget)
 
 
+    def transform_to_mongo(self, mongoDBTreeWidget, statusBar):
+        dialog = QtWidgets.QFileDialog()
+
+        if dialog.exec_():
+                filenames = dialog.selectedFiles()
+                config_filepath = filenames[0]
+                #config_json = load_config(config_filepath)
+                print(config_filepath)
+
+
+
+
+
+
+
+
+
     # def delete_row(self, databaseDataTableWidget, database_name, collection_name):
     #     row_id = databaseDataTableWidget
     #     self.mySQL_utils.delete_row(database_name, collection_name, )

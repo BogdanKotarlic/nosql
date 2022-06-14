@@ -1,0 +1,9 @@
+{
+    "kompanija": {
+        "columns": ["naziv"],
+        "values": ["Singidunum"],
+        "content": [
+            "projekat"
+        ]
+    }
+}
