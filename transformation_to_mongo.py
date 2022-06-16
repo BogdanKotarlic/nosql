@@ -6,11 +6,11 @@ def connection(host):
     my_client = pymongo.MongoClient("mongodb://"+host)
     return my_client
 
-def load_config(path="config files/mongodb_config.json"):
+def load_config(path):
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
 
-def load_spec(path="mongodb_spec.json"):
+def load_spec(path):
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
 
@@ -25,16 +25,21 @@ print(doc)
 
 database = "upravljanje_projektom"
 table = list(doc.keys())[0]
+print(table)
 result_doc = {"title":table}
 data = mysql_functions.search(database, table, doc[table]["columns"], doc[table]["values"]).fetchall()
 for t in doc[table]["content"]:
     content = mysql_functions.search(database, t, [relationships[t][table]], doc[table]["values"]).fetchall()
+    print(content)
     result_doc[t]=content
 
 
 with open("result_doc.json", "w", encoding="utf-8") as f:
     json.dump(result_doc, f)
+#example_mysql mogu sve relacije da ubacim
 
-my_db = my_client["my_database"]
-my_col = my_db["docs"]
-my_col.insert_one(result_doc)
+
+#mogu vec ime baze nabaviti pre nego se selektuje example.json
+#my_db = my_client["my_database"]
+#my_col = my_db["docs"]
+#my_col.insert_one(result_doc)
