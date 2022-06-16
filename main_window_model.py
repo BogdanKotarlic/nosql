@@ -6,6 +6,7 @@ from mongoDB_component.mongoDB_viewer import MongoTabViewer
 from utils.mysql_utils import MySQLUtils
 from mySQL_tab_component.mySQL_tab_viewer import MySQLTabViewer
 from utils.mongo_utils import MongoUtils
+from utils.load_config import load_config
 
 class MainWindowModel:
     def __init__(self):
@@ -147,14 +148,47 @@ class MainWindowModel:
 
 
     def transform_to_mongo(self, mongoDBTreeWidget, statusBar):
-        dialog = QtWidgets.QFileDialog()
+        databases = self.mySQL_utils.get_all_databases()
+        database_name = None
 
-        if dialog.exec_():
-                filenames = dialog.selectedFiles()
-                config_filepath = filenames[0]
-                #config_json = load_config(config_filepath)
-                print(config_filepath)
+        if databases == None:
+            return
+        else:
+            database_names = [database[0] for database in databases]
 
+            item, ok = QtWidgets.QInputDialog.getItem(None, "Choose your database for Mogno", 
+            "List of databases:", database_names, 0, False)
+                
+            if ok and item:
+                database_name = item
+
+        
+        sql_load = self.mySQL_utils.load_and_connect_db(statusBar)
+        mongo_load = self.mongo_utils.load_and_connect_db(statusBar)
+
+        relationships = load_config("example_mysql.json")
+
+        print(relationships)
+
+        doc = load_config("example.json")
+        #print(doc)
+
+        database = database_name
+        #table = list(doc.keys())[0]
+        #print(table)
+        #result_doc = {"title":table}
+        #data = mysql_functions.search(database, table, doc[table]["columns"], doc[table]["values"]).fetchall()
+        #for t in doc[table]["content"]:
+        #   content = mysql_functions.search(database, t, [relationships[t][table]], doc[table]["values"]).fetchall()
+        #   print(content)
+        #   result_doc[t]=content
+
+
+        my_db = mongo_load["my_database"]
+        my_col = my_db["docs"]
+        my_col.insert_one(result_doc)
+
+        
 
 
 
