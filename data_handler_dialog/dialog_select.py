@@ -1,15 +1,21 @@
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore
 from utils.mysql_utils import MySQLUtils
 from data_handler_dialog import message_box
+from data_handler_dialog.table_reference_spec import load_spec
 
 
 class DialogSelect(QtWidgets.QDialog):
     def __init__(self, db_name, table_name, column):
         super().__init__()
 
+        self.setObjectName("DialogSelect")
+        self.resize(400, 400)
         self.column = column
-
         self.selected = None
+        mysql_spec = load_spec()
+        self.id_column_name = None
+        if table_name in mysql_spec.keys():
+            self.id_column_name = mysql_spec[table_name]["id_col"]
 
         self.setWindowTitle("Dialog")
 
@@ -19,14 +25,6 @@ class DialogSelect(QtWidgets.QDialog):
 
         self.layout = QtWidgets.QVBoxLayout()
 
-        self.button = QtWidgets.QPushButton(self)
-        self.button.setObjectName("button")
-        self.button.setText("Select")
-
-        self.button.clicked.connect(self.select)
-
-        self.layout.addWidget(self.button)
-
         self.tableWidget = QtWidgets.QTableWidget(self)
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(0)
@@ -35,6 +33,14 @@ class DialogSelect(QtWidgets.QDialog):
         self.tableWidget.setSortingEnabled(True)
 
         self.layout.addWidget(self.tableWidget)
+
+        self.button = QtWidgets.QPushButton(self)
+        self.button.setObjectName("button")
+        self.button.setText("Select")
+
+        self.button.clicked.connect(self.select)
+
+        self.layout.addWidget(self.button)
 
         # self.layout.addWidget(self.buttonBox)
         self.setLayout(self.layout)
@@ -60,9 +66,12 @@ class DialogSelect(QtWidgets.QDialog):
         self.tableWidget.setHorizontalHeaderLabels(self.columns)
 
         for row in range(num_rows):
-            for column in range(num_cols):
+            for column_index, column in enumerate(self.columns):
                 self.tableWidget.setItem(
-                    row, column, QtWidgets.QTableWidgetItem((str(self.data[row][column]))))
+                    row, column_index, QtWidgets.QTableWidgetItem((str(self.data[row][column_index]))))
+
+        if self.id_column_name != "":
+            self.tableWidget.setColumnHidden(0, True)
 
     def select(self):
         selected_indexes = self.tableWidget.selectedIndexes()

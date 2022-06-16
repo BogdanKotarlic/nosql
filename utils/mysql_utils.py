@@ -209,7 +209,7 @@ class MySQLUtils:
                 msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
                 msg.exec_()
 
-        def update(self, database_name, table_name, columns, values, statusBar):
+        def update(self, database_name, table_name, columns, new_values, values_with_keys, statusBar):
             try:
                 sql = "USE %s" % database_name
                 self.mycursor.execute(sql)
@@ -219,16 +219,16 @@ class MySQLUtils:
                     if index > 0 and index < len(columns):
                         sql += ", "
                     sql += column + " = " + "%s"
-                    sql_values.append(str(values[index]))
+                    sql_values.append(str(new_values[index]))
                 sql += " WHERE "
                 columns_data = [column for column in self.get_table_columns(database_name, table_name)]
                 first = False
                 for index, column in enumerate(columns_data):
                     if column[3] == "PRI":
                         if first and index > 0 and index < len(columns_data):
-                            sql += ", "
+                            sql += " AND "
                         sql += columns[index] + " = " + "%s"
-                        sql_values.append(str(values[index]))
+                        sql_values.append(str(values_with_keys[index]))
                         first = True
                 print("query je: ", sql, sql_values)
                 self.mycursor.execute(sql, sql_values)

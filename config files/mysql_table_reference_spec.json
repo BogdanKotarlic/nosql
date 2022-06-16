@@ -1,67 +1,137 @@
 {
   "tim": {
-    "projekat_id": ["projekat", "projekat_id"]
+    "ref": {
+      "projekat_id": ["projekat", "projekat_id"]
+    },
+    "id_col": "tim_id"
   },
   "projekat": {
-    "kompanija_id": ["kompanija", "kompanija_id"]
+    "ref": {
+      "kompanija_id": ["kompanija", "kompanija_id"]
+    },
+    "id_col": "projekat_id"
   },
   "sastav_projekta": {
-    "projekat_id": ["projekat", "projekat_id"],
-    "pod_projekat_id": ["projekat", "projekat_id"]
+    "ref": {
+      "projekat_id": ["projekat", "projekat_id"],
+      "pod_projekat_id": ["projekat", "projekat_id"]
+    },
+    "id_col": ""
   },
   "etapa_projekta": {
-    "projekat_id": ["projekat", "projekat_id"]
+    "ref": {
+      "projekat_id": ["projekat", "projekat_id"]
+    },
+    "id_col": "etapa_projekta_id"
   },
   "sprint_plan": {
-    "etapa_projekta_id": ["etapa_projekta", "etapa_projekta_id"]
+    "ref": {
+      "etapa_projekta_id": ["etapa_projekta", "etapa_projekta_id"]
+    },
+    "id_col": "sprint_id"
   },
   "sprint_realizacija": {
-    "sprint_plan_id": ["sprint_plan", "sprint_id"]
+    "ref": {
+      "sprint_plan_id": ["sprint_plan", "sprint_id"]
+    },
+    "id_col": ""
   },
   "task_u_etapi": {
-    "etapa_projekta_id": ["etapa_projekta", "etapa_projekta_id"],
-    "task_id": ["task", "task_id"]
+    "ref": {
+      "etapa_projekta_id": ["etapa_projekta", "etapa_projekta_id"],
+      "task_id": ["task", "task_id"]
+    },
+    "id_col": ""
   },
   "task_u_sprintu": {
-    "task_id": ["task", "task_id"],
-    "sprint_plan_id": ["sprint_plan", "sprint_id"]
+    "ref": {
+      "task_id": ["task", "task_id"],
+      "sprint_plan_id": ["sprint_plan", "sprint_id"]
+    },
+    "id_col": "task_u_sprintu_id"
   },
   "task_realizacija": {
-    "task_u_sprintu_id": ["task_u_sprintu", "task_u_sprintu_id"]
+    "ref": {
+      "task_u_sprintu_id": ["task_u_sprintu", "task_u_sprintu_id"]
+    },
+    "id_col": ""
   },
   "kompanija": {
-    "naseljeno_mesto_id": ["naseljeno_mesto", "naseljeno_mesto_id"]
+    "ref": {
+      "naseljeno_mesto_id": ["naseljeno_mesto", "naseljeno_mesto_id"]
+    },
+    "id_col": "kompanija_id"
   },
   "naseljeno_mesto": {
-    "drzava_id": ["drzava", "drzava_id"]
+    "ref": {
+      "drzava_id": ["drzava", "drzava_id"]
+    },
+    "id_col": "naseljeno_mesto_id"
   },
   "ljudski_resursi": {
-    "naseljeno_mesto_id": ["naseljeno_mesto", "naseljeno_mesto_id"]
+    "ref": {
+      "naseljeno_mesto_id": ["naseljeno_mesto", "naseljeno_mesto_id"]
+    },
+    "id_col": "covek_id"
   },
   "zaposleni": {
-    "covek_id": ["ljudski_resursi", "covek_id"],
-    "kompanija_id": ["kompanija", "kompanija_id"]
+    "ref": {
+      "covek_id": ["ljudski_resursi", "covek_id"],
+      "kompanija_id": ["kompanija", "kompanija_id"]
+    },
+    "id_col": "zaposleni_id"
   },
   "freelancer": {
-    "covek_id": ["ljudski_resursi", "covek_id"]
+    "ref": {
+      "covek_id": ["ljudski_resursi", "covek_id"]
+    },
+    "id_col": "freelancer_id"
   },
   "clan_tima": {
-    "zaposleni_id": ["zaposleni", "zaposleni_id"],
-    "tim_id": ["tim", "tim_id"],
-    "freelancer_id": ["freelancer", "freelancer_id"]
+    "ref": {
+      "zaposleni_id": ["zaposleni", "zaposleni_id"],
+      "tim_id": ["tim", "tim_id"],
+      "freelancer_id": ["freelancer", "freelancer_id"]
+    },
+    "id_col": "clan_tima_id"
   },
   "vestine_coveka": {
-    "vestina_id": ["vestina", "vestina_id"],
-    "nivo_vestine_id": ["nivo_vestina", "nivo_vestine_id"],
-    "covek_id": ["ljudski_resursi", "covek_id"]
+    "ref": {
+      "vestina_id": ["vestina", "vestina_id"],
+      "nivo_vestine_id": ["nivo_vestina", "nivo_vestine_id"],
+      "covek_id": ["ljudski_resursi", "covek_id"]
+    },
+    "id_col": "vestine_coveka_id"
   },
   "clan_tima_ima_aktivnost": {
-    "clan_tima_id": ["clan_tima", "clan_tima_id"],
-    "task_u_sprintu_id": ["task_u_sprintu", "task_u_sprintu_id"]
+    "ref": {
+      "clan_tima_id": ["clan_tima", "clan_tima_id"],
+      "task_u_sprintu_id": ["task_u_sprintu", "task_u_sprintu_id"]
+    },
+    "id_col": ""
   },
   "partner_na_projektu": {
-    "projekat_id": ["projekat", "projekat_id"],
-    "projekat_vlasnik_kompanija_id": ["projekat", "kompanija_id"],
-    "partner_kompanija_id": ["kompanija", "kompanija_id"]
+    "ref": {
+      "projekat_id": ["projekat", "projekat_id"],
+      "projekat_vlasnik_kompanija_id": ["projekat", "kompanija_id"],
+      "partner_kompanija_id": ["kompanija", "kompanija_id"]
+    },
+    "id_col": ""
+  },
+  "drzava": {
+    "ref": {},
+    "id_col": "drzava_id"
+  },
+  "vestina": {
+    "ref": {},
+    "id_col": "vestina_id"
+  },
+  "nivo_vestina": {
+    "ref": {},
+    "id_col": "nivo_vestine_id"
+  },
+  "task": {
+    "ref": {},
+    "id_col": "task_id"
   }
 }

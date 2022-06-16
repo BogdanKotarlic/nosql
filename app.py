@@ -1,6 +1,8 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from main_window_controller import MainWindowController
+from crud_actions_component.crud_actions_viewer import CRUDActionsViewer
+from ref_tables_component.ref_tables_viewer import RefTablesViewer
 
 
 class MainWindowViewer(object):
@@ -9,13 +11,16 @@ class MainWindowViewer(object):
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(900, 580)
+        MainWindow.resize(900, 620)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
+        # CRUD akcije
+        self.CRUDActionsViewer = CRUDActionsViewer(self.centralwidget)
+
         # databasesTabWidget
         self.databasesTabWidget = QtWidgets.QTabWidget(self.centralwidget)
-        self.databasesTabWidget.setGeometry(QtCore.QRect(10, 30, 241, 511))
+        self.databasesTabWidget.setGeometry(QtCore.QRect(10, 50, 241, 511))
         self.databasesTabWidget.setObjectName("databasesTabWidget")
 
         # MySQL deo u databasesTabWidget-u
@@ -100,9 +105,22 @@ class MainWindowViewer(object):
 
         # Deo za prikaz podataka baza kroz tabove unutar dataTabWidget-a
         self.dataTabWidget = QtWidgets.QTabWidget(self.centralwidget)
-        self.dataTabWidget.setGeometry(QtCore.QRect(260, 30, 621, 511))
+        self.dataTabWidget.setGeometry(QtCore.QRect(260, 50, 621, 511))
         self.dataTabWidget.setObjectName("dataTabWidget")
         self.dataTabWidget.setTabsClosable(True)
+        self.main_window_controller.set_data_tab_widget(self.dataTabWidget)
+
+        # ref table deo
+        self.refLabel = QtWidgets.QLabel(self.centralwidget)
+        self.refLabel.setText("Referenced Tables:")
+        self.refLabel.setObjectName("RefLabel")
+        self.refLabel.setGeometry(QtCore.QRect(10, 570, 150, 25))
+        self.refLabel.setVisible(False)
+
+        self.refTablesViewer = RefTablesViewer(self.centralwidget)
+        self.refTablesViewer.setGeometry(QtCore.QRect(5, 585, 865, 380))
+        self.refTablesViewer.setContentsMargins(0, 0, 0, 0)
+        self.refTablesViewer.setVisible(False)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -115,13 +133,11 @@ class MainWindowViewer(object):
 
         # connections
         self.connectMySQLDBPushButton.clicked.connect(lambda x: self.main_window_controller.load_and_connect_mysql_db(self.mySQLTreeWidget, self.statusbar))
-        
         self.deleteMySQLDBPushButton.clicked.connect(lambda x: self.main_window_controller.delete_selected_mysql_database(self.mySQLTreeWidget, self.statusbar))
         self.createMySQLDBPushButton.clicked.connect(lambda x: self.main_window_controller.create_mysql_database(self.newMySQLNameLineEdit, self.mySQLTreeWidget, self.statusbar))
         
+        self.mySQLTreeWidget.itemDoubleClicked.connect(lambda y, x: self.main_window_controller.add_mysql_table_tab(y, x, self.dataTabWidget, self.statusbar, self.CRUDActionsViewer))
         self.dataTabWidget.tabCloseRequested.connect(lambda x: self.main_window_controller.close_tab(x, self.dataTabWidget))
-
-        self.mySQLTreeWidget.itemDoubleClicked.connect(lambda y, x: self.main_window_controller.add_mysql_table_tab(y, x, self.dataTabWidget, self.statusbar))
         
         #Mongo connections and actions on databases
         self.transformButton.clicked.connect(lambda x: self.main_window_controller.transform_from_sql_to_mongo(self.mongoDBTreeWidget, self.statusbar))
@@ -132,6 +148,10 @@ class MainWindowViewer(object):
         self.createMongoDBPushButton.clicked.connect(lambda x: self.main_window_controller.create_mongo_database(self.newMongoNameLineEdit, self.mongoDBTreeWidget, self.statusbar))
    
         self.mongoDBTreeWidget.itemDoubleClicked.connect(lambda y, x: self.main_window_controller.add_mongo_table_tab(y, x, self.dataTabWidget, self.statusbar))
+
+        # Za sve
+        self.dataTabWidget.currentChanged.connect(lambda x: self.main_window_controller.change_tab_controller_for_CRUDActionViewer(x, self.dataTabWidget, self.CRUDActionsViewer))
+        self.dataTabWidget.currentChanged.connect(lambda x: self.main_window_controller.show_mysql_ref_tables(x, self.dataTabWidget, self.refTablesViewer, self.refLabel, MainWindow, self.statusbar, self.CRUDActionsViewer))
 
 
     def retranslateUi(self, MainWindow):

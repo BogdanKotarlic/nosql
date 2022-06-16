@@ -71,8 +71,8 @@ class MainWindowModel:
                     table_name = table[0]
                     table_item.setText(0, table_name)
 
-    def add_mysql_table_tab(self, database_name, table_name, dataTabWidget, statusBar):
-        mySQL_tab_viewer = MySQLTabViewer(database_name, table_name, statusBar)
+    def add_mysql_table_tab(self, database_name, table_name, dataTabWidget, statusBar, CRUDActionsViewer):
+        mySQL_tab_viewer = MySQLTabViewer(database_name, table_name, statusBar, CRUDActionsViewer)
         dataTabWidget.addTab(mySQL_tab_viewer, table_name)
         dataTabWidget.setCurrentWidget(mySQL_tab_viewer)
 

@@ -6,21 +6,27 @@ from functools import partial
 from data_handler_dialog.dialog_select import DialogSelect
 
 
-class DataHandlerDialog(QtWidgets.QDialog):
-    def __init__(self, db_name, table_name, data, mode, statusBar, dataTableWidget, tab_controller, tab_model, parent=None):
+class DataHandlerDialog(QtWidgets.QWidget):
+    def __init__(self, db_name, table_name, data, mode, statusBar, dataTableWidget, tab_controller, tab_model, DataVerticalLayout, parent=None):
         super().__init__(parent=parent)
-        self.move(1400, 200)
+        # self.move(1400, 200)
         self.new = None
         self.mySQL_utils = MySQLUtils()
         self.statusBar = statusBar
         self.tab_controller = tab_controller
         self.tab_model = tab_model
         self.dataTableWidget = dataTableWidget 
+        self.values_with_keys = []
+        self.select_clicked = False
+        self.parentDataVerticalLayout = DataVerticalLayout
 
         mysql_spec = load_spec()
         table_spec = {}
+        self.id_column_name = ""
+        self.id_column_value = 0
         if table_name in mysql_spec.keys():
-            table_spec = mysql_spec[table_name]
+            table_spec = mysql_spec[table_name]["ref"]
+            self.id_column_name = mysql_spec[table_name]["id_col"]
             # print("table spec", table_spec)
 
         columns = [column[0]
@@ -28,6 +34,7 @@ class DataHandlerDialog(QtWidgets.QDialog):
         self.db_name = db_name
         self.table_name = table_name
         self.columns = columns
+        self.columns_with_references = []
 
         self.search_results = []
 
@@ -40,7 +47,6 @@ class DataHandlerDialog(QtWidgets.QDialog):
         self.texts = []
 
         for column in columns:
-            # DA LI TREBA ISKLJUCITI INPUT ZA ID POLJE?
             self.horizontalLayout = QtWidgets.QHBoxLayout()
             self.horizontalLayout.setObjectName("horizontalLayout")
             self.label = QtWidgets.QLabel(self)
@@ -53,18 +59,17 @@ class DataHandlerDialog(QtWidgets.QDialog):
             self.texts.append(self.lineEdit)
 
             if column in table_spec.keys():
+                self.columns_with_references.append(column)
                 self.selectButton = QtWidgets.QPushButton(self)
                 self.selectButton.setObjectName(column+"SelectButton")
                 self.selectButton.setText("Select")
                 # tabela koju referencira - table_spec[column][0], polje tabele koju referencira - table_spec[column][1], polje tabele koja referencira
                 self.selectButton.clicked.connect(partial(self.select, table_spec[column][0], table_spec[column][1], column))
                 self.horizontalLayout.addWidget(self.selectButton)
-                self.newButton = QtWidgets.QPushButton(self)
-                self.newButton.setObjectName(column+"NewButton")
-                self.newButton.setText("New")
-                self.newButton.clicked.connect(partial(self.new_dialog, table_spec[column][0], table_spec[column][1], column))
-                self.horizontalLayout.addWidget(self.newButton)
                 
+            if column == self.id_column_name:
+                self.label.setVisible(False)
+                self.lineEdit.setVisible(False)
             self.layout.addLayout(self.horizontalLayout)
 
         self.button = QtWidgets.QPushButton(self)
@@ -88,35 +93,57 @@ class DataHandlerDialog(QtWidgets.QDialog):
             self.button.setText("Insert")
             self.button.clicked.connect(partial(self.insert_new, data))
 
+        self.close_button = QtWidgets.QPushButton(self)
+        self.close_button.setObjectName("closeButton")
+        self.close_button.setText("Close")
+        self.close_button.clicked.connect(self.remove_dialog)
+
+        # self.actionLine = QtWidgets.QHBoxLayout(self)
+        # self.actionLine.addWidget(self.button)
+        # self.actionLine.addWidget(self.close_button)
+
         self.layout.addWidget(self.button)
+        self.layout.addWidget(self.close_button)
 
         # self.layout.addWidget(self.buttonBox)
         self.setLayout(self.layout)
 
     def insert(self):
         values = tuple([text.text().strip() for text in self.texts])
+
         self.mySQL_utils.insert(
             self.db_name, self.table_name, self.columns, values, self.statusBar)
-        self.clear_all()
-        self.tab_controller.load_table_data(self.db_name, self.table_name, self.dataTableWidget)
+        self.clear_all(self.columns_with_references)
+        self.tab_controller.load_table_data(None, True)
         # self.close()
 
     def update(self):
-        values = tuple([text.text().strip() for text in self.texts])
+        new_values = tuple([text.text().strip() for text in self.texts])
+        values_with_keys = []
+        if self.select_clicked:
+            values_with_keys = self.values_with_keys
+        else:
+            values_with_keys = new_values
         self.mySQL_utils.update(
-            self.db_name, self.table_name, self.columns, values, self.statusBar)
-        self.tab_controller.load_table_data(self.db_name, self.table_name, self.dataTableWidget)
+            self.db_name, self.table_name, self.columns, new_values, values_with_keys, self.statusBar)
+        self.tab_controller.load_table_data()
         # self.close()
 
-    def clear_all(self):
-        for t in self.texts:
-            t.clear()
+    def clear_all(self, columns_with_references=None):
+        if columns_with_references == None:
+            for t in self.texts:
+                t.clear()
+            return
+        for column in self.columns:
+            if column not in self.columns_with_references:
+                self.texts[self.columns.index(column)].clear()
 
     def search(self):
         values = tuple([text.text().strip() for text in self.texts])
         results = self.mySQL_utils.search(
             self.db_name, self.table_name, self.columns, values)
         self.search_results = [result for result in results]
+        
         self.tab_model.load_table_data(self.db_name, self.table_name, self.dataTableWidget, self.get_search_results())
         # self.close()
 
@@ -124,6 +151,8 @@ class DataHandlerDialog(QtWidgets.QDialog):
         return self.search_results
 
     def select(self, ref_table, ref_column, column):
+        self.select_clicked = True
+        self.values_with_keys = tuple([text.text().strip() for text in self.texts])
         dlg = DialogSelect(self.db_name, ref_table, ref_column)
         closed = dlg.exec()
         if not closed:
@@ -131,12 +160,12 @@ class DataHandlerDialog(QtWidgets.QDialog):
             print("selektovano je: ", selected)
             self.texts[self.columns.index(column)].setText(str(selected))
 
-    def new_dialog(self, ref_table, ref_column, column):
-        dlg = DataHandlerDialog(self.db_name, ref_table, ref_column, "new", self.statusBar)
-        closed = dlg.exec()
-        if not closed:
-            new = dlg.get_new()
-            self.texts[self.columns.index(column)].setText(str(new))
+    # def new_dialog(self, ref_table, ref_column, column):
+    #     dlg = DataHandlerDialog(self.db_name, ref_table, ref_column, "new", self.statusBar)
+    #     closed = dlg.exec()
+    #     if not closed:
+    #         new = dlg.get_new()
+    #         self.texts[self.columns.index(column)].setText(str(new))
 
     def insert_new(self, column):
         self.new = self.texts[self.columns.index(column)].text().strip()
@@ -145,3 +174,8 @@ class DataHandlerDialog(QtWidgets.QDialog):
 
     def get_new(self):
         return self.new
+
+    def remove_dialog(self):
+        self.tab_controller.old_dialog = None
+        self.parentDataVerticalLayout.removeWidget(self)
+        self.deleteLater()

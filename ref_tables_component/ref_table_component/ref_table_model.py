@@ -5,7 +5,7 @@ from PyQt5.QtCore import Qt
 from utils.mysql_utils import MySQLUtils
 from data_handler_dialog.table_reference_spec import load_spec
 
-class MySQLTabModel:
+class RefTableModel:
     def __init__(self):
         self.mySQL_utils = MySQLUtils()
 
