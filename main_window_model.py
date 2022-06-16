@@ -1,7 +1,9 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMessageBox, QTreeWidgetItem
 from PyQt5.QtCore import Qt
+from arango_component.arango_viewer import ArangoViewer
 from mongoDB_component.mongoDB_viewer import MongoTabViewer
+from utils.arango_utils import ArangoUtils
 
 from utils.mysql_utils import MySQLUtils
 from mySQL_tab_component.mySQL_tab_viewer import MySQLTabViewer
@@ -11,6 +13,7 @@ class MainWindowModel:
     def __init__(self):
         self.mySQL_utils = MySQLUtils()
         self.mongo_utils = MongoUtils()
+        self.arango_utils = ArangoUtils()
     
     def load_and_connect_mysql_db(self, mySQLTreeWidget, statusBar):
         self.mySQL_utils.load_and_connect_db(statusBar)
@@ -145,7 +148,67 @@ class MainWindowModel:
             
             self.fill_mongo_tree(mongoDBTreeWidget)
 
+    # Аrango load and connect database
+    def load_and_connect_arangodb(self, arangoTreeWidget, statusBar):
+        self.arango_utils.load_and_connect_db(statusBar)
 
-    # def delete_row(self, databaseDataTableWidget, database_name, collection_name):
-    #     row_id = databaseDataTableWidget
-    #     self.mySQL_utils.delete_row(database_name, collection_name, )
+        self.fill_arango_tree(arangoTreeWidget)
+    
+    def create_arango_db(self, new_database_name, arangoTreeWidget, statusBar):
+        matched_items = arangoTreeWidget.findItems(new_database_name, Qt.MatchContains, 0)
+        if len(matched_items) > 0:
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Information)
+            msg.setText("Database with that name already exists.")
+            msg.setWindowTitle("Info")
+            msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+            msg.exec_()
+
+        elif new_database_name == "":
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Information)
+            msg.setText("Database name not set.")
+            msg.setWindowTitle("Info")
+            msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+            msg.exec_()
+
+        self.mongo_utils.create_database(new_database_name, statusBar)
+        self.fill_arango_tree(arangoTreeWidget)
+
+    # Аrango - fill tree view with elements
+    def fill_arango_tree(self, arangoTreeWidget):
+        arangoTreeWidget.clear()
+
+        databases = self.arango_utils.get_all_databases()
+        if databases == None:
+            return
+        else:
+            for database_name in databases:
+                arango_database_item = QTreeWidgetItem(arangoTreeWidget)
+                arango_database_item.setText(0, database_name)
+                collections = self.arango_utils.get_all_tables(database_name)
+
+                for collection in collections:
+                    collection_item = QTreeWidgetItem(arango_database_item)
+                    collection_item.setText(0, collection)
+    
+    def add_arango_table_tab(self, database_name, table_name, dataTabWidget, statusBar):
+        arango_viewer = ArangoViewer(database_name, table_name, statusBar)
+        dataTabWidget.addTab(arango_viewer, table_name)
+        dataTabWidget.setCurrentWidget(arango_viewer)
+
+    def delete_selected_arangodb(self, arangoTreeWidget, statusBar):
+        selected_items = arangoTreeWidget.selectedItems()
+        if len(selected_items) == 0:
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Information)
+            msg.setText("You need to select database before deleting it.")
+            msg.setWindowTitle("Info")
+            msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+            msg.exec_()
+        else:
+            for selected_item in selected_items:
+                database_name = selected_item.text(0)
+                self.arango_utils.delete_database(database_name, statusBar)
+            
+            self.fill_arango_tree(arangoTreeWidget)

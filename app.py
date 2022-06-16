@@ -155,6 +155,16 @@ class MainWindowViewer(object):
    
         self.mongoDBTreeWidget.itemDoubleClicked.connect(lambda y, x: self.main_window_controller.add_mongo_table_tab(y, x, self.dataTabWidget, self.statusbar))
 
+        # Arango connections and actions on databases
+        self.connectArangoPushButton.clicked.connect(lambda x: self.main_window_controller.load_and_connect_arango_db(self.arangoTreeWidget, self.statusbar))
+        
+        self.deleteArangoPushButton.clicked.connect(lambda x: self.main_window_controller.delete_selected_arango_db(self.arangoTreeWidget, self.statusbar))
+        self.createArangoPushButton.clicked.connect(lambda x: self.main_window_controller.create_arango_db(self.newArangoNameLineEdit, self.arangoTreeWidget, self.statusbar))
+        
+        self.dataTabWidget.tabCloseRequested.connect(lambda x: self.main_window_controller.close_tab(x, self.dataTabWidget))
+
+        self.mySQLTreeWidget.itemDoubleClicked.connect(lambda y, x: self.main_window_controller.add_arango_table_tab(y, x, self.dataTabWidget, self.statusbar))
+
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate

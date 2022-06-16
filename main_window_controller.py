@@ -57,3 +57,15 @@ class MainWindowController:
         new_database_name = newMongoNameLineEdit.text()
         newMongoNameLineEdit.clear()
         self.main_window_model.create_mongo_database(new_database_name, mongoDBTreeWidget, statusBar)
+
+    # Arango
+    def load_and_connect_arango_db(self, arangoTreeWidget, statusBar):
+        self.main_window_model.load_and_connect_arangodb(arangoTreeWidget, statusBar)
+    
+    def delete_selected_arangodb(self, arangoTreeWidget, statusBar):
+        self.main_window_model.delete_selected_mongodb(arangoTreeWidget, statusBar)
+    
+    def create_arango_db(self, newArangoNameLineEdit, arangoTreeWidget, statusBar):
+        new_database_name = newArangoNameLineEdit.text()
+        newArangoNameLineEdit.clear()
+        self.main_window_model.create_arango_database(new_database_name, arangoTreeWidget, statusBar)
