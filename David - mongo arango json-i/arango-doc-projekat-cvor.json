@@ -1,0 +1,38 @@
+[
+  {
+    "naziv": "projekat",
+    "iz_tabele": "projekat",
+    "polja": {
+      "naziv": "string"
+    }
+  },
+  {
+    "naziv": "etapa_projekta",
+    "iz_tabele": "etapa_projekta",
+    "polja": {
+      "naziv": "string",
+      "verzija": "number",
+      "planski_pocetak": "date",
+      "planski_zavrsetak": "date"
+    }
+  },
+  {
+    "naziv": "sprint_plan",
+    "iz_tabele": "sprint_plan",
+    "polja": {
+      "naziv": "string",
+      "verzija": "number",
+      "planski_pocetak": "date",
+      "planski_zavrsetak": "date"
+    }
+  },
+  {
+    "naziv": "sprint_realizacija",
+    "iz_tabele": "sprint_realizacija",
+    "polja": {
+      "verzija": "number",
+      "stvarni_pocetak": "date",
+      "stvarni_zavrsetak": "date"
+    }
+  }
+]

@@ -34,8 +34,8 @@ class MySQLTabModel:
             for column in range(table_column_count):
                 dataTableWidget.setItem(row, column, QtWidgets.QTableWidgetItem(str(table_data[row][column])))
         
-        if self.has_id_column(table_name):
-            dataTableWidget.setColumnHidden(0, True)
+        # if self.has_id_column(table_name):
+        #     dataTableWidget.setColumnHidden(0, True)
 
         if mark_new_row:
             dataTableWidget.selectRow(table_row_count-1)

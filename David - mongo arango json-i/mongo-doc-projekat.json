@@ -1,0 +1,75 @@
+{
+  "projekat": {
+    "id_vrednost": 1,
+    "polja_dokumenta": { "naziv": "string" },
+    "etapa_projekta": {
+      "polje_poredjenja_u_detetu": ["projekat_id"],
+      "tabela_polje_poredjenja_u_roditelju": { "projekat": "projekat_id" },
+      "polja_dokumenta": {
+        "naziv": "string",
+        "verzija": "number",
+        "planski_pocetak": "date",
+        "planski_zavrsetak": "date"
+      },
+      "sprint_plan": {
+        "polje_poredjenja_u_detetu": ["etapa_projekta_id"],
+        "tabela_polje_poredjenja_u_roditelju": {
+          "etapa_projekta": "etapa_projekta_id"
+        },
+        "polja_dokumenta": {
+          "naziv": "string",
+          "verzija": "number",
+          "planski_pocetak": "date",
+          "planski_zavrsetak": "date"
+        },
+        "sprint_realizacija": {
+          "polje_poredjenja_u_detetu": ["sprint_plan_id"],
+          "tabela_polje_poredjenja_u_roditelju": {
+            "sprint_plan": "sprint_plan_id"
+          },
+          "polja_dokumenta": {
+            "verzija": "number",
+            "stvarni_pocetak": "date",
+            "stvarni_zavrsetak": "date"
+          }
+        },
+        "task_u_sprintu": {
+          "polje_poredjenja_u_detetu": ["sprint_plan_id"],
+          "tabela_polje_poredjenja_u_roditelju": { "sprint_plan": "sprint_id" },
+          "polja_dokumenta": {
+            "verzija": "number",
+            "planski_pocetak": "date",
+            "planski_zavrsetak": "date"
+          },
+          "task_realizacija": {
+            "polje_poredjenja_u_detetu": ["task_u_sprintu_id"],
+            "tabela_polje_poredjenja_u_roditelju": {
+              "task_u_sprintu": "task_u_sprintu_id"
+            },
+            "polja_dokumenta": {
+              "verzija": "number",
+              "stvarni_pocetak": "date",
+              "stvarni_zavrsetak": "date"
+            }
+          }
+        }
+      },
+      "task_u_etapi": {
+        "polje_poredjenja_u_detetu": ["etapa_projekta_id", "task_id"],
+        "tabela_polje_poredjenja_u_roditelju": {
+          "projekat": "projekat_id",
+          "task": "task_id"
+        },
+        "polja_dokumenta": {},
+        "task": {
+          "polje_poredjenja_u_detetu": ["task_id"],
+          "tabela_polje_poredjenja_u_roditelju": { "task_u_etapi": "task_id" },
+          "polja_dokumenta": {
+            "naziv": "string",
+            "opis": "string"
+          }
+        }
+      }
+    }
+  }
+}

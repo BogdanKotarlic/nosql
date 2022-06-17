@@ -1,0 +1,26 @@
+[
+  {
+    "roditelj": "projekat",
+    "dete": "etapa_projekta",
+    "polja_poredjenja": {
+      "kod_roditelja": "projekat_id",
+      "kod_deteta": "projekat_id"
+    }
+  },
+  {
+    "roditelj": "etapa_projekta",
+    "dete": "sprint_plan",
+    "polja_poredjenja": {
+      "kod_roditelja": "etapa_projekta_id",
+      "kod_deteta": "etapa_projekta_id"
+    }
+  },
+  {
+    "roditelj": "sprint_planom",
+    "dete": "sprint_realizacija",
+    "polja_poredjenja": {
+      "kod_roditelja": "sprint_id",
+      "kod_deteta": "sprint_plan_id"
+    }
+  }
+]
